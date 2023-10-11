@@ -3,10 +3,10 @@ title: "Zombies Homework 3"
 author: "By: Lillian Holden"
 date: "Due October 11th, 2023 for Peer Commentary"
 output: html_document
----
+--- 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r zombie, echo=FALSE, fig.align='center', fig.cap='Aghhhhhh!', out.width='25%'}
+knitr::include_graphics('~/Documents/GitHub/AN588_Zombies_holdenl/zombie.png')
 ```
 
 ```{r}
@@ -84,7 +84,7 @@ boxplot(log(height) ~ gender, d)
 boxplot(log(weight) ~ gender, d)
 ```
 
-```{r}
+```{r warning=FALSE}
 boxplot(log(age) ~ gender, d)
 ```
 
