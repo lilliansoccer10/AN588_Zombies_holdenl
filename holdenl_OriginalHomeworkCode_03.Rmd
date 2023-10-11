@@ -285,6 +285,26 @@ sd(meanzombiekills)
 sd(meanyearsedu)
 ```
 
+vs 
+
+Standard Errors from Question 5
+
+[1] 0.6819214
+[1] 2.962555
+[1] 0.5405065
+[1] 0.3067566
+[1] 0.3088106
+
+The standard deviations in question 6 are similar to the standard errors from question 5. The weights seem to be the most different, however. The differences are listed below: 
+
+```{r}
+sd(meanheights)-se(zombiesample$height)
+sd(meanweights)-se(zombiesample$weight)
+sd(meanages)-se(zombiesample$age)
+sd(meanzombiekills)-se(zombiesample$zombies_killed)
+sd(meanyearsedu)-se(zombiesample$years_of_education)
+```
+
 Determining Normal Distribution 
 ```{r}
 hist(meanheights, main = "Histogram of Final Sample Height", xlim = c(65,70), xlab = "Height", ylab = "Probability")
