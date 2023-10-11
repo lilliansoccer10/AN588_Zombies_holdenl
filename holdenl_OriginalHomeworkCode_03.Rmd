@@ -1,0 +1,317 @@
+---
+title: "Zombies Homework 3"
+author: "By: Lillian Holden"
+date: "Due October 11th, 2023 for Peer Commentary"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(curl)
+library(dplyr)
+library(sciplot)
+library(manipulate)
+library(ggplot2)
+```
+
+## Challenges
+1. I had a very hard time coming up with and keeping track of the variables I was using. This homework had a lot of information, and it got overwhelming at times.
+2. I also read that we could not find standard deviation for question 1 using the sd() function, so I did it manually at first - but it got me the same answer. 
+
+Is population standard deviation different than regular? If so, please comment the difference. 
+
+3. I had a hard time with my box plots on question 2, but after looking through the modules/googling my issue, I was able to figure it out. 
+4. For question 3, I originally thought I needed to put height/weight/age in one plot, so I was having a really hard time. I then realized we probably need one plot showing age vs. weight and one showing age vs. height and had to compare them. 
+5. Lastly, I had a hard time with the sample function. I found a function that worked: sample_n.  
+
+
+```{r}
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall23/zombies.csv")
+d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+head(d)
+```
+
+D is the vector for the Zombie Data Set
+
+Assign Each Varible to a Vector (Excluding D)
+```{r} 
+a <- d$height
+b <- d$weight
+c <- d$age
+e <- d$zombies_killed
+f <- d$years_of_education
+```
+
+## Question 1
+```{r}
+#Finding the Mean
+mean(a, na.rm=TRUE)
+mean(b, na.rm=TRUE)
+mean(c, na.rm=TRUE)
+mean(e, na.rm=TRUE)
+mean(f, na.rm=TRUE)
+```
+
+
+```{r}
+#Finding Standard Deviation Step-By-Step
+sqrt(sum((a-mean(a))^2/(length(a)-1)))
+sqrt(sum((b-mean(b))^2/(length(b)-1)))
+sqrt(sum((c-mean(c))^2/(length(c)-1)))
+sqrt(sum((e-mean(e))^2/(length(e)-1)))
+sqrt(sum((f-mean(f))^2/(length(f)-1)))
+```
+
+```{r}
+#Finding the Standard Deviation with sd() Function
+sd(d$height, na.rm=TRUE)
+sd(d$weight, na.rm=TRUE)
+sd(d$age, na.rm=TRUE)
+sd(d$zombies_killed, na.rm=TRUE)
+sd(d$years_of_education, na.rm=TRUE)
+```
+
+## Question 2
+
+```{r}
+boxplot(log(height) ~ gender, d)
+```
+
+```{r}
+boxplot(log(weight) ~ gender, d)
+```
+
+```{r}
+boxplot(log(age) ~ gender, d)
+```
+
+```{r}
+boxplot(log(zombies_killed) ~ gender, d)
+```
+
+```{r}
+boxplot(log(years_of_education) ~ gender, d)
+```
+
+## Question 3
+```{r}
+par(mfrow = c(1, 2))
+plot(x = d$age, y = d$height)
+plot(x = d$age, y = d$weight)
+```
+
+Do these variables seem related? In what way?
+Data seems to collect near the 20s for both weight and height meaning that people in their 20s weight more and are taller than other ages in the data set. 
+
+## Question 4
+
+```{r}
+hist(a, main = "Histogram of Height", xlim = c(50,90), xlab = "Height", ylab = "Probability")
+```
+
+```{r}
+qqnorm(a, main = "QQ Plot of Height" )
+qqline(a,col="gray")
+```
+ABOVE IS NORMAL
+
+```{r}
+hist(b, main = "Histogram of Weight", xlim = c(50,250), xlab = "Weight", ylab = "Probability")
+```
+
+```{r}
+qqnorm(b, main = "QQ Plot of Weight")
+qqline(b,col="gray")
+```
+ABOVE IS NORMAL
+
+```{r}
+hist(c, main = "Histogram of Age", xlim = c(5,35), xlab = "Age", ylab = "Probability")
+```
+
+```{r}
+qqnorm(c, main = "QQ Plot of Age" )
+qqline(c,col="gray")
+```
+ABOVE IS NORMAL
+
+```{r}
+hist(e, main = "Histogram of Zombies Killed", xlim = c(0,20), xlab = "Zombies Killed", ylab = "Probability")
+```
+
+```{r}
+qqnorm(e, main = "QQ Plot of Zombies Killed" )
+qqline(e,col="gray")
+```
+ABOVE IS NOT NORMAL
+
+```{r}
+hist(f, main = "Histogram of Years of Education", xlim = c(0,10), xlab = "Years of Education", ylab = "Probability")
+```
+
+```{r}
+qqnorm(f, main = "QQ Plot of Years of Education" )
+qqline(f,col="gray")
+```
+ABOVE IS NOT NORMAL
+
+## Question 5
+
+1 Subset of 30 Zombies
+
+```{r}
+set.seed(1)
+zombiesample <- sample_n(d, size = 30, replace = FALSE) 
+zombiesample
+```
+
+1 Subset of 30 Zombies Means
+
+```{r}
+mh <- mean(zombiesample$height)
+mh
+mw <- mean(zombiesample$weight)
+mw
+ma <- mean(zombiesample$age)
+ma
+mk <- mean(zombiesample$zombies_killed)
+mk
+me <- mean(zombiesample$years_of_education)
+me
+```
+
+1 Subset of 30 Zombies Standard Deviations
+```{r}
+sd(zombiesample$height)
+sd(zombiesample$weight)
+sd(zombiesample$age)
+sd(zombiesample$zombies_killed)
+sd(zombiesample$years_of_education)
+```
+
+1 Subset of 30 Zombies Standard Errors
+
+```{r}
+se(zombiesample$height)
+se(zombiesample$weight)
+se(zombiesample$age)
+se(zombiesample$zombies_killed)
+se(zombiesample$years_of_education)
+```
+
+CIs of 1 Subset of 30 Zombies Using a T-Test (I'm not sure if I can use the t.test here, but why not?)
+
+```{r}
+t.test(zombiesample$height)
+```
+
+```{r}
+t.test(zombiesample$weight)
+```
+
+```{r}
+t.test(zombiesample$age)
+```
+
+```{r}
+t.test(zombiesample$zombies_killed)
+```
+
+```{r}
+t.test(zombiesample$years_of_education)
+```
+
+## Question 6 
+
+99 Samples of 30 Zombies
+
+```{r}
+#I used the replicate function to sample 99 more means of each variable
+set.seed(1)
+z <- replicate(99, mean(sample(d$height, 30, replace = FALSE)))
+y <- replicate(99, mean(sample(d$weight, 30, replace = FALSE)))
+x <- replicate(99, mean(sample(d$age, 30, replace = FALSE)))
+w <- replicate(99, mean(sample(d$zombies_killed, 30, replace = FALSE)))
+v <- replicate(99, mean(sample(d$years_of_education, 30, replace = FALSE)))
+```
+
+
+```{r}
+#this outputs the 99 means for each variable 
+z
+y
+x
+w
+v
+```
+
+Combining Old Sample with New Sample
+
+```{r}
+meanheights <- c(mh,z)
+meanweights <- c(mw,y)
+meanages <- c(ma,x)
+meanzombiekills <- c(mk,w)
+meanyearsedu <- c(me,v)
+```
+
+```{r}
+#checking to make sure there are 100 means for each variable
+meanheights
+meanweights
+meanages
+meanzombiekills
+meanyearsedu
+```
+
+Calculating the Final Means and Standard Deviations
+
+```{r}
+mean(meanheights)
+mean(meanweights)
+mean(meanages)
+mean(meanzombiekills)
+mean(meanyearsedu)
+```
+
+```{r}
+sd(meanheights)
+sd(meanweights)
+sd(meanages)
+sd(meanzombiekills)
+sd(meanyearsedu)
+```
+
+Determining Normal Distribution 
+```{r}
+hist(meanheights, main = "Histogram of Final Sample Height", xlim = c(65,70), xlab = "Height", ylab = "Probability")
+```
+ABOVE IS A NORMAL DISTRIBUTION
+
+```{r}
+hist(meanweights, main = "Histogram of Final Sample Weight", xlim = c(130,155), xlab = "Weight", ylab = "Probability")
+```
+
+ABOVE IS A NORMAL DISTRIBUTION
+
+```{r}
+hist(meanages, main = "Histogram of Final Sample Ages", xlim = c(18,22), xlab = "Ages", ylab = "Probability")
+```
+
+ABOVE IS A NORMAL DISTRIBUTION
+
+```{r}
+hist(meanzombiekills, main = "Histogram of Final Sample Zombie Kills", xlim = c(2,4.5), xlab = "Zombie Kills", ylab = "Probability")
+```
+ABOVE IS A NORMAL DISTRIBUTION
+
+```{r}
+hist(meanyearsedu, main = "Histogram of Final Sample Years of Education", xlim = c(2,4), xlab = "Years of Education", ylab = "Probability")
+```
+
+ABOVE IS A NORMAL DISTRIBUTION
+
+In the previous example: ages, zombies killed, and years of education were all not normal distributions, but now they are. 
