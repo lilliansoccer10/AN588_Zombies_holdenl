@@ -3,6 +3,8 @@ title: "Zombies Homework 3"
 author: "By: Lillian Holden"
 date: "Due October 11th, 2023 for Peer Commentary"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 --- 
 
 ```{r zombie, echo=FALSE, fig.align='center', fig.cap='Aghhhhhh!', out.width='25%'}
@@ -17,6 +19,8 @@ library(manipulate)
 library(ggplot2)
 ```
 
+I am having issues formatting the knitted file to the specific theme -- any suggestions?
+
 ## Challenges
 1. I had a very hard time coming up with and keeping track of the variables I was using. This homework had a lot of information, and it got overwhelming at times.
 2. I also read that we could not find standard deviation for question 1 using the sd() function, so I did it manually at first - but it got me the same answer. 
@@ -30,11 +34,9 @@ Is population standard deviation different than regular? If so, please comment t
 
 ```{r}
 f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall23/zombies.csv")
-d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE)
+d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE) #Assign D as the vector for the data set
 head(d)
 ```
-
-D is the vector for the Zombie Data Set
 
 Assign Each Varible to a Vector (Excluding D)
 ```{r} 
@@ -76,24 +78,25 @@ sd(d$years_of_education, na.rm=TRUE)
 
 ## Question 2
 
+
 ```{r}
-boxplot(log(height) ~ gender, d)
+boxplot(height ~ gender, d, main = "Height in Relation to Gender", xlab = "Gender", ylab = "Height")
 ```
 
 ```{r}
-boxplot(log(weight) ~ gender, d)
+boxplot(weight ~ gender, d, main = "Weight in Relation to Gender", xlab = "Gender", ylab = "Weight")
 ```
 
 ```{r warning=FALSE}
-boxplot(log(age) ~ gender, d)
+boxplot(age ~ gender, d, main = "Age in Relation to Gender", xlab = "Gender", ylab = "Age")
 ```
 
 ```{r}
-boxplot(log(zombies_killed) ~ gender, d)
+boxplot(zombies_killed ~ gender, d, main = "Zombies Killed in Relation to Gender", xlab = "Gender", ylab = "Zombies Killed")
 ```
 
 ```{r}
-boxplot(log(years_of_education) ~ gender, d)
+boxplot(years_of_education ~ gender, d, main = "Years of Education in Relation to Gender", xlab = "Gender", ylab = "Years of Education")
 ```
 
 ## Question 3
