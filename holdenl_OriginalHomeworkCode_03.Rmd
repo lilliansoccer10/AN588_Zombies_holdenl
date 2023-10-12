@@ -44,7 +44,7 @@ head(d)
 ```
 <br>
 
-#### Assign Each Varible to a Vector (Excluding D)
+#### Assign Each Varible to a Vector (Excluding D because this is the Main Data Set)
 ```{r} 
 a <- d$height
 b <- d$weight
@@ -112,7 +112,7 @@ plot(x = d$age, y = d$height, col = "green", xlab="Age", ylab="Height")
 plot(x = d$age, y = d$weight, col = "purple", xlab="Age", ylab="Weight")
 ```
 
-#### Do these variables seem related? In what way?
+
 #### Data seems to collect near the 20s for both weight and height meaning that people in their 20s weight more and are taller than other ages in the data set. The data overall for height seems to increase as age increases, whereas weight follows that trend to an extent, but is more dispersed and ranges throughout age. 
 <br>
 
