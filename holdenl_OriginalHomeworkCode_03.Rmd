@@ -2,7 +2,13 @@
 title: "Zombies Homework 3"
 author: "By: Lillian Holden"
 date: "Due October 11th, 2023 for Peer Commentary"
-output: html_document
+output:
+  rmdformats::readthedown:
+    self_contained: true
+    thumbnails: true
+    lightbox: true
+    gallery: false
+    highlight: tango
 editor_options: 
   chunk_output_type: inline
 --- 
@@ -21,7 +27,6 @@ library(ggplot2)
 <br>
 <br>
 
-#### I am having issues formatting the knitted file to the specific theme -- any suggestions?
 
 ## Challenges
 1. I had a very hard time coming up with and keeping track of the variables I was using. This homework had a lot of information, and it got overwhelming at times.
