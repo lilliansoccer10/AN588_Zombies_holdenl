@@ -261,14 +261,14 @@ t.test(zombiesample$years_of_education)
 
 #### 99 Samples of 30 Zombies
 
-####You can use the replicate function to sample 99 more means of each variable
+####You can use the rep function to sample 99 more means of each variable
 ```{r}
 set.seed(1)
-z <- replicate(99, mean(sample(d$height, 30, replace = FALSE)))
-y <- replicate(99, mean(sample(d$weight, 30, replace = FALSE)))
-x <- replicate(99, mean(sample(d$age, 30, replace = FALSE)))
-w <- replicate(99, mean(sample(d$zombies_killed, 30, replace = FALSE)))
-v <- replicate(99, mean(sample(d$years_of_education, 30, replace = FALSE)))
+z <- rep(99, mean(sample(d$height, 30, replace = FALSE)))
+y <- rep(99, mean(sample(d$weight, 30, replace = FALSE)))
+x <- rep(99, mean(sample(d$age, 30, replace = FALSE)))
+w <- rep(99, mean(sample(d$zombies_killed, 30, replace = FALSE)))
+v <- rep(99, mean(sample(d$years_of_education, 30, replace = FALSE)))
 ```
 <br>
 
