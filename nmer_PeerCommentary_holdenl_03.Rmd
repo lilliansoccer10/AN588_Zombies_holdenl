@@ -1,0 +1,399 @@
+---
+title: "Zombies Homework 3"
+author: "By: Lillian Holden"
+date: "Due October 11th, 2023 for Peer Commentary"
+output:
+  rmdformats::readthedown:
+    self_contained: true
+    thumbnails: true
+    lightbox: true
+    gallery: false
+    highlight: tango
+editor_options: 
+  chunk_output_type: inline
+--- 
+
+```{r zombie, echo=FALSE, fig.align='center', fig.cap='Aghhhhhh!', out.width='25%'}
+knitr::include_graphics('~/Documents/BU/AN_588/AN588_Zombies_holdenl/zombie.png')
+```
+
+```{r message=FALSE, warning=FALSE}
+library(curl)
+library(dplyr)
+library(sciplot)
+library(manipulate)
+library(ggplot2)
+```
+<br>
+<br>
+
+
+## Challenges
+1. I had a very hard time coming up with and keeping track of the variables I was using. This homework had a lot of information, and it got overwhelming at times.
+2. I also read that we could not find standard deviation for question 1 using the sd() function, so I did it manually at first - but it got me the same answer. 
+3. I had a hard time with my box plots on question 2, but after looking through the modules/googling my issue, I was able to figure it out. 
+4. For question 3, I originally thought I needed to put height/weight/age in one plot, so I was having a really hard time. I then realized we probably need one plot showing age vs. weight and one showing age vs. height and had to compare them. 
+5. Lastly, I had a hard time with the sample function. I found a function that worked: sample_n.  
+<br>
+## Peer Commentary (Nicole Merullo) <br>
+**1. What you learned from running their Original Homework Code that helped improve your own code.** <br>
+Very concise set up of boxplots and scatter plots using x ~ y for the axes. I really only saw this starting with these most recent modules and now your code. It's definitely a lot easier and faster to write out plot code this way. I'm also curious about your use of the t test to determine the CI for the poisson distributed variables. I had to do some research to find a way to calculate the CI for poisson distributed data and I'm still not sure it's right. I think the T test is a lot simpler. Additionally, your use of br and center is helpful for formatting! <br>
+**2. What you did in your own code that might help to improve theirs.** <br>
+-I created a formula for population variance then a formula building on that to get population standard deviation so it would be a little bit easier to handle the code in the second chunk of question 1. I have pasted the formula for population variance below in your code. I got this originally from Module 7. <br>
+-When I ran question 6, your histograms were looking a little flat and did not show normal distributions. Everything looked really good in terms of code- I tried pasting in what I used for the histograms and it didn't change anything so I looked further back. The mean variables used as the data in the histograms were mostly full of 99s. At first I thought this was a problem with set.seed but usually set.seed doesn't cause problems like that. So then I looked at your replication code and it looked perfect except for one very very small difference between ours and I didn't think it would make a difference but apparently rep() and replicate() are different functions. You need to use replicate() here. rep() will repeat the first arugment passed through it, in this case: 99. Which is why we ended up with vecotrs full of 99s! I changed rep() to replicate in your code to get it to work. I also added probability = TRUE to your histogram code which gets the plot to look like a probability function. <br>
+**3. What challenges, if any, you both faced in your code that could not be helped by comparison.** <br> I don't have anything for this question but I definitely think it's funny that we both had to find different sample functions to use in question 5 and then went back to regular sample() for question 6! <br>
+**4. Whether the annotation/commenting on your peer’s Original Homework Code is readable and interpretable to you, and if not then how it could be improved.** <br> Overall great use of chunks and breaking up your code into chunks that makes sense so it is easy to follow. I think it would be easier to navigate if you named your chunks.
+<br>
+
+```{r}
+f <- curl("https://raw.githubusercontent.com/fuzzyatelin/fuzzyatelin.github.io/master/AN588_Fall23/zombies.csv")
+d <- read.csv(f, header = TRUE, sep = ",", stringsAsFactors = FALSE) #Assign D as the vector for the data set
+head(d)
+```
+<br>
+
+#### Assign Each Varible to a Vector (Excluding D because this is the Main Data Set)
+```{r} 
+a <- d$height
+b <- d$weight
+c <- d$age
+e <- d$zombies_killed
+f <- d$years_of_education
+```
+<br>
+
+## Question 1
+```{r}
+#Finding the Mean
+mean(a, na.rm=TRUE)
+mean(b, na.rm=TRUE)
+mean(c, na.rm=TRUE)
+mean(e, na.rm=TRUE)
+mean(f, na.rm=TRUE)
+```
+
+```{r}
+#Finding Standard Deviation Step-By-Step
+sqrt(sum((a-mean(a))^2/(length(a)-1)))
+sqrt(sum((b-mean(b))^2/(length(b)-1)))
+sqrt(sum((c-mean(c))^2/(length(c)-1)))
+sqrt(sum((e-mean(e))^2/(length(e)-1)))
+sqrt(sum((f-mean(f))^2/(length(f)-1)))
+## Another method for finding Population Variance then Population SD (Peer Commentary):
+pop_v <- function(x) {
+    sum((x - mean(x))^2)/length(x)
+}
+pop_sd <- function(x) {
+    sqrt(pop_v(x))
+}
+```
+
+```{r}
+#Finding the Standard Deviation with sd() Function
+sd(d$height, na.rm=TRUE)
+sd(d$weight, na.rm=TRUE)
+sd(d$age, na.rm=TRUE)
+sd(d$zombies_killed, na.rm=TRUE)
+sd(d$years_of_education, na.rm=TRUE)
+```
+<br>
+
+## Question 2
+
+```{r}
+boxplot(height ~ gender, d, col = "green", main = "Height in Relation to Gender", xlab = "Gender", ylab = "Height")
+```
+
+```{r}
+boxplot(weight ~ gender, d, col = "purple", main = "Weight in Relation to Gender", xlab = "Gender", ylab = "Weight")
+```
+
+```{r warning=FALSE}
+boxplot(age ~ gender, d, col = "green", main = "Age in Relation to Gender", xlab = "Gender", ylab = "Age")
+```
+
+```{r}
+boxplot(zombies_killed ~ gender, d, col = "purple", main = "Zombies Killed in Relation to Gender", xlab = "Gender", ylab = "Zombies Killed")
+```
+
+```{r}
+boxplot(years_of_education ~ gender, d, col = "green", main = "Years of Education in Relation to Gender", xlab = "Gender", ylab = "Years of Education")
+```
+
+## Question 3
+```{r}
+par(mfrow = c(1, 2))
+plot(x = d$age, y = d$height, col = "green", xlab="Age", ylab="Height")
+plot(x = d$age, y = d$weight, col = "purple", xlab="Age", ylab="Weight")
+```
+
+
+#### Data seems to collect near the 20s for both weight and height meaning that people in their 20s weight more and are taller than other ages in the data set. The data overall for height seems to increase as age increases, whereas weight follows that trend to an extent, but is more dispersed and ranges throughout age. 
+<br>
+
+## Question 4
+
+```{r}
+hist(a, col = "orange", main = "Histogram of Height", xlim = c(50,90), xlab = "Height", ylab = "Probability")
+```
+
+```{r}
+qqnorm(a, main = "QQ Plot of Height" )
+qqline(a,col="gray")
+```
+<br>
+
+#### Based on the two graphs above, it can be concluded that height originates from a normal distribution. 
+<br>
+
+```{r}
+hist(b, col = "purple", main = "Histogram of Weight", xlim = c(50,250), xlab = "Weight", ylab = "Probability")
+```
+
+```{r}
+qqnorm(b, main = "QQ Plot of Weight")
+qqline(b,col="gray")
+```
+<br>
+
+#### Based on the two graphs above, it can be concluded that weight originates from a normal distribution. 
+<br>
+
+```{r}
+hist(c, col = "orange", main = "Histogram of Age", xlim = c(5,35), xlab = "Age", ylab = "Probability")
+```
+
+```{r}
+qqnorm(c, main = "QQ Plot of Age" )
+qqline(c,col="gray")
+```
+<br>
+
+#### Based on the two graphs above, it can be concluded age originates from a normal distribution. 
+<br>
+
+```{r}
+hist(e, col = "purple", main = "Histogram of Zombies Killed", xlim = c(0,20), xlab = "Zombies Killed", ylab = "Probability")
+```
+
+```{r}
+qqnorm(e, main = "QQ Plot of Zombies Killed" )
+qqline(e,col="gray")
+```
+<br>
+
+#### Based on the two graphs above, it can be concluded that zombies killed does not originate from a normal distribution. 
+<br>
+
+```{r}
+hist(f, col = "orange", main = "Histogram of Years of Education", xlim = c(0,10), xlab = "Years of Education", ylab = "Probability")
+```
+
+```{r}
+qqnorm(f, main = "QQ Plot of Years of Education" )
+qqline(f,col="gray")
+```
+<br>
+
+#### Based on the two graphs above, it can be concluded that years of education does not originate from a normal distribution. 
+<br>
+
+
+## Question 5
+<br>
+
+#### One Subset of 30 Zombies
+
+```{r}
+set.seed(1)
+zombiesample <- sample_n(d, size = 30, replace = FALSE) 
+zombiesample
+```
+<br>
+
+#### Means of the One Subset of 30 Zombies for Each Variable
+
+```{r}
+mh <- mean(zombiesample$height)
+mh
+mw <- mean(zombiesample$weight)
+mw
+ma <- mean(zombiesample$age)
+ma
+mk <- mean(zombiesample$zombies_killed)
+mk
+me <- mean(zombiesample$years_of_education)
+me
+```
+<br>
+
+#### Standard Deviations of the One Subset of 30 Zombies for Each Variable
+```{r}
+sd(zombiesample$height)
+sd(zombiesample$weight)
+sd(zombiesample$age)
+sd(zombiesample$zombies_killed)
+sd(zombiesample$years_of_education)
+```
+<br>
+
+#### Standard Errors of the One Subset of 30 Zombies for Each Variable
+
+```{r}
+se(zombiesample$height)
+se(zombiesample$weight)
+se(zombiesample$age)
+se(zombiesample$zombies_killed)
+se(zombiesample$years_of_education)
+```
+<br>
+
+#### CIs of 1 Subset of 30 Zombies Using a T-Test (I'm not sure if I can use the t.test here, but why not?)
+
+```{r}
+t.test(zombiesample$height)
+```
+
+```{r}
+t.test(zombiesample$weight)
+```
+
+```{r}
+t.test(zombiesample$age)
+```
+
+```{r}
+t.test(zombiesample$zombies_killed)
+```
+
+```{r}
+t.test(zombiesample$years_of_education)
+```
+<br>
+
+## Question 6 
+<br>
+
+#### 99 Samples of 30 Zombies
+
+####You can use the rep function to sample 99 more means of each variable
+```{r}
+set.seed(1)
+#peer commentary: changed rep() to replicate()
+z <- replicate(99, mean(sample(d$height, 30, replace = FALSE)))
+y <- replicate(99, mean(sample(d$weight, 30, replace = FALSE)))
+x <- replicate(99, mean(sample(d$age, 30, replace = FALSE)))
+w <- replicate(99, mean(sample(d$zombies_killed, 30, replace = FALSE)))
+v <- replicate(99, mean(sample(d$years_of_education, 30, replace = FALSE)))
+```
+<br>
+
+#### Output the 99 means for each variable 
+```{r}
+#peer commentary: note how now the means are all different when returned
+z
+y
+x
+w
+v
+```
+<br>
+
+#### Creating One Data Set of All 100 Means
+
+```{r}
+meanheights <- c(mh,z)
+meanweights <- c(mw,y)
+meanages <- c(ma,x)
+meanzombiekills <- c(mk,w)
+meanyearsedu <- c(me,v)
+```
+<br>
+
+#### Below are the 100 Means for Each Variable!
+```{r}
+meanheights
+meanweights
+meanages
+meanzombiekills
+meanyearsedu
+```
+<br>
+
+#### Calculating the Final Mean and Standard Deviation for Each Variable
+
+```{r}
+mean(meanheights)
+mean(meanweights)
+mean(meanages)
+mean(meanzombiekills)
+mean(meanyearsedu)
+```
+
+```{r}
+sd(meanheights)
+sd(meanweights)
+sd(meanages)
+sd(meanzombiekills)
+sd(meanyearsedu)
+```
+<br>
+
+#### Differences Between Standard Deviations (Question 6) and Standard Errors (Question 5)
+
+```{r}
+sd(meanheights)-se(zombiesample$height)
+sd(meanweights)-se(zombiesample$weight)
+sd(meanages)-se(zombiesample$age)
+sd(meanzombiekills)-se(zombiesample$zombies_killed)
+sd(meanyearsedu)-se(zombiesample$years_of_education)
+```
+<br>
+
+#### The standard deviations in question 6 are similar to the standard errors from question 5. The weight standard deviation and error seem to be the most different, while the zombies killed appears to be the most similar.
+<br>
+
+#### Determining Normal Distribution 
+```{r}
+hist(meanheights, col = "green", main = "Histogram of Final Sample Height", xlim = c(65,70), xlab = "Height", ylab = "Probability", probability = TRUE)
+```
+<br>
+
+#### Based on the graph above, it can be concluded age originates from a normal distribution. 
+<br>
+
+```{r}
+hist(meanweights, col = "green", main = "Histogram of Final Sample Weight", xlim = c(130,155), xlab = "Weight", ylab = "Probability", probability = TRUE)
+```
+<br>
+
+#### Based on the graph above, it can be concluded age originates from a normal distribution.
+<br>
+
+```{r}
+hist(meanages, col = "green", main = "Histogram of Final Sample Ages", xlim = c(18,22), xlab = "Ages", ylab = "Probability", probability = TRUE)
+```
+<br>
+
+#### Based on the graph above, it can be concluded age originates from a normal distribution.
+<br>
+
+```{r}
+hist(meanzombiekills, col = "green", main = "Histogram of Final Sample Zombie Kills", xlim = c(2,4.5), xlab = "Zombie Kills", ylab = "Probability", probability = TRUE)
+```
+<br>
+
+#### Based on the graph above, it can be concluded age originates from a normal distribution.
+<br>
+
+```{r}
+hist(meanyearsedu, col = "green", main = "Histogram of Final Sample Years of Education", xlim = c(2,4), xlab = "Years of Education", ylab = "Probability", probability = TRUE)
+```
+<br>
+
+#### Based on the graph above, it can be concluded age originates from a normal distribution.
+<br>
+
+#### In the previous example: ages, zombies killed, and years of education were all not normal distributions, but now they are. 
+<br>
+<center> Happy Spooky Season!<center>
